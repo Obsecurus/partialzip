@@ -57,7 +57,7 @@ lint: ## Run all the linters
 
 .PHONY: dry_release
 dry_release:
-	goreleaser --skip-publish --rm-dist --skip-validate
+	goreleaser --skip-publish --clean --skip-validate
 
 .PHONY: bump
 bump: ## Incriment version patch number
@@ -70,7 +70,7 @@ bump: ## Incriment version patch number
 release: bump ## Create a new release from the VERSION
 	@echo " > Creating Release"
 	@hack/make/release $(shell cat VERSION)
-	@goreleaser --rm-dist
+	@goreleaser --clean
 
 .PHONY: destroy
 destroy: ## Remove release from the VERSION
