@@ -47,7 +47,7 @@ func (p *PartialZip) init() error {
 	resp, _ := client.Do(req)
 	p.Size = resp.ContentLength
 
-	for offset < 0 && chuck < (1000 * 1024) {
+	for offset < 0 && chuck < (1000*1024) {
 		//increase until we have enough to hold in the offset
 		chuck = 10 * chuck
 
@@ -135,8 +135,8 @@ func (p *PartialZip) Get(path string) (io.ReadCloser, error) {
 		// find path in zip directory
 		if strings.EqualFold(file.Name, path) {
 			req, _ := http.NewRequest("GET", p.URL, nil)
-			end := uint64(file.headerOffset) + file.CompressedSize64 + padding
-			reqRange := fmt.Sprintf("bytes=%d-%d", file.headerOffset, end)
+			end := uint64(file.HeaderOffset) + file.CompressedSize64 + padding
+			reqRange := fmt.Sprintf("bytes=%d-%d", file.HeaderOffset, end)
 			req.Header.Add("Range", reqRange)
 			resp, _ := client.Do(req)
 
@@ -169,8 +169,8 @@ func (p *PartialZip) Download(path string) (int, error) {
 		// find path in zip directory
 		if strings.EqualFold(file.Name, path) {
 			req, _ := http.NewRequest("GET", p.URL, nil)
-			end := uint64(file.headerOffset) + file.CompressedSize64 + padding
-			reqRange := fmt.Sprintf("bytes=%d-%d", file.headerOffset, end)
+			end := uint64(file.HeaderOffset) + file.CompressedSize64 + padding
+			reqRange := fmt.Sprintf("bytes=%d-%d", file.HeaderOffset, end)
 			req.Header.Add("Range", reqRange)
 			resp, _ := client.Do(req)
 

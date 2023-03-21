@@ -154,7 +154,7 @@ type File struct {
 	// zip          *Reader
 	zipr         io.ReaderAt
 	zipsize      int64
-	headerOffset int64
+	HeaderOffset int64
 	DataOffset   int64 // Offsetr to data start
 }
 
@@ -203,7 +203,7 @@ func readDirectoryHeader(f *File, r io.Reader) error {
 	commentLen := int(b.uint16())
 	b = b[4:] // skipped start disk number and internal attributes (2x uint16)
 	f.ExternalAttrs = b.uint32()
-	f.headerOffset = int64(b.uint32())
+	f.HeaderOffset = int64(b.uint32())
 	d := make([]byte, filenameLen+extraLen+commentLen)
 	if _, err := io.ReadFull(r, d); err != nil {
 		return err
@@ -232,7 +232,7 @@ func readDirectoryHeader(f *File, r io.Reader) error {
 
 	needUSize := f.UncompressedSize == ^uint32(0)
 	needCSize := f.CompressedSize == ^uint32(0)
-	needHeaderOffset := f.headerOffset == int64(^uint32(0))
+	needHeaderOffset := f.HeaderOffset == int64(^uint32(0))
 
 	// Best effort to find what we need.
 	// Other zip authors might not even follow the basic format,
@@ -272,7 +272,7 @@ parseExtras:
 				if len(fieldBuf) < 8 {
 					return errFormat
 				}
-				f.headerOffset = int64(fieldBuf.uint64())
+				f.HeaderOffset = int64(fieldBuf.uint64())
 			}
 		case ntfsExtraID:
 			if len(fieldBuf) < 4 {
