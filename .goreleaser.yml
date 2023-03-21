@@ -20,7 +20,7 @@ builds:
       - CGO_ENABLED=0
 
 archives:
-  replacements:
+  - replacements:
     darwin: Darwin
     linux: Linux
     windows: Windows
@@ -30,7 +30,7 @@ checksum:
   name_template: "checksums.txt"
 
 signs:
-  artifacts: checksum
+  - artifacts: checksum
 
 changelog:
   sort: asc
